@@ -1,0 +1,35 @@
+## my reject
+*.ods
+gulpfile.coffee
+
+## Dependency
+node_modules
+
+## Logs
+logs
+*.log
+npm-debug.log*
+
+##transpiler result
+**/*.js
+**/*.js.map
+**/*.html
+**/*.css
+**/*.json
+!0526_code/**/*.html
+!0526_code/**/*.css
+!0526_code/**/*.json
+!package.json
+!wdio.conf.js
+!./index.js
+## MicrosoftOffice template
+*.tmp
+
+## Word temporary
+~$*.doc*
+
+## Excel temporary
+~$*.xls*
+
+## Excel Backup File
+*.xlk
