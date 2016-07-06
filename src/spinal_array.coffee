@@ -10,21 +10,28 @@ require 'at-lodash'
 
 #c = col, r = row
 @get_boundary = (c, r)->
-   br: {x:c, y:0} # bottom-right
-   tr: {x:c, y:r} # top-right
-   tl: {x:0, y:r} # top-left
-   bl: {x:0, y:0} # bottom-left
+   bl: {x: 0, y: 0} # bottom-left
+   br: {x: c, y: 0} # bottom-right
+   tr: {x: c, y: r} # top-right
+   tl: {x: 0, y: r} # top-left
 
+@get_increase_status = (pos1, pos2) ->
+   x: if pos1.x - pos2.x > 0 then true else false
+   y: if pos1.y - pos2.y > 0 then true else false
 #get spiner data from the setted collection
 @get_spinal_data_coll = (pointColl, isClockwise, col, row)=>
    boundary = @get_boundary(col, row);
-   @map pointColl, (v, i, o)=>
-      pre = o[i - 1] ? {x:-1, y:0}
-      if pre.x+1 < boundary.br.x
-         @set(v, 'x', pre.x+1)
-      else if pre.y+1 < boundary.tr.y
+   increase = {x: true, y: true}
+   @each @cloneDeep(pointColl), (v, i, o)=>
+      pre = o[i - 1] ? {x: -1, y: 0}
+      if increase.x and pre.x + 1 < boundary.br.x
+         @set(v, 'x', pre.x + 1)
+      else if increase.y and pre.y + 1 < boundary.tr.y
          @set(v, 'x', pre.x)
-         @set(v, 'y', pre.y+1)
+         @set(v, 'y', pre.y + 1)
+      else if pre.x - 1 > boundary.tl.x
+         increase.x = false
+         @set(v, 'x', pre.x - 1)
 #      else if i
 
 @to_spinal_array = (spinalColl)->
