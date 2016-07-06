@@ -33,6 +33,15 @@ require 'at-lodash'
          increase.x = false
          @set(v, 'x', pre.x - 1)
 #      else if i
+@get_process_status = (pos1, c, r)=>
+   cycle = [c, r, c, r]
+   len = (pos1.num + 1) % (@sum(cycle) - cycle.length)
+
+   if len < c then {x: 1, y: 0}
+   else if len < c + r - 1 then {x: 0, y: 1}
+   else if len < c + r + c - 2 then {x: -1, y: 0}
+   else {x: 0, y: -1}
+
 
 @to_spinal_array = (spinalColl)->
 #render the location-array and show console

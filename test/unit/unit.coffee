@@ -36,6 +36,21 @@ describe 'spinal Array', ->
                get_spinal_data_coll(coll_test, true)[col + row + 2]['y'].should.eql(row)
                get_spinal_data_coll(coll_test, true)[col + row + 2]['x'].should.eql(col - 1)
             it "should decrease y, and stop decrease x by flowing time", ->
+   describe "get_process_status", ->
+      [col,row] = [5, 4]
+      pointColl = set_point_coll(col, row)
+      describe "default status is {x:1, y:0}", ->
+         get_process_status(pointColl[0], col, row).should.has.keys('x', 'y')
+         get_process_status(pointColl[0], col, row).should.has.property('x', 1)
+      describe "if pointColl[col]'s length is col, status is {x:0, y:1}", ->
+         get_process_status(pointColl[col - 1], col, row).should.has.keys('x', 'y')
+         get_process_status(pointColl[col - 1], col, row).should.has.property('y', 1)
+      describe "if pointColl[col]'s length is col, status is {x:-1, y:0}", ->
+         get_process_status(pointColl[col + row - 2], col, row).should.has.keys('x', 'y')
+         get_process_status(pointColl[col + row - 2], col, row).should.has.property('x', -1)
+      describe "if pointColl[col]'s length is col, status is {x:0, y:-1}", ->
+         get_process_status(pointColl[col + row + col - 3], col, row).should.has.keys('x', 'y')
+         get_process_status(pointColl[col + row + col - 3], col, row).should.has.property('x', 0)
 
 #      describe "if predicted y equal boudary.tr.y, status is {x:-1, y:0}"
 #      describe "if predicted x equal boudary.tl.x, status is {x:0, y:-1}"
