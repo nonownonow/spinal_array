@@ -6,7 +6,7 @@ require 'at-lodash'
 
 #set point on location with default position, (0,0) and set location infomation
 @set_point_coll = (col, row)->
-   {num: i, x: 0, y: 0} for i in [0...row * col]
+   {x: 0, y: 0, v: i} for i in [0...row * col]
 
 @get_spinal_data_coll = (pointColl, c, r)=>
    @each @cloneDeep(pointColl), (v, i, o)=>
@@ -24,8 +24,11 @@ require 'at-lodash'
          v.x = pre.x
          v.y = pre.y - 1
 
-@to_spinal_array = (spinalColl)->
-#render the location-array and show console
-@render_location_arr = ()->
+@to_2d_arr = (spinalColl)=>
+   col = @max(@map spinalColl, 'x') + 1
+   row = @max(@map spinalColl, 'y') + 1
+   @reduce spinalColl, (r, v, i)=>
+      @set r, "[#{v.y}][#{v.x}]", v.v
+   , (@concat arr = [], [0...col] for [0...row])
 
 
