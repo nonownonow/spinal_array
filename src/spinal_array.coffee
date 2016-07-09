@@ -2,7 +2,7 @@ require 'at-lodash'
 
 @spinal_array = (col, row)=> @flow(
    @set_point_coll
-   @$(@get_spinal_data_coll) col, row
+   @$(@get_spinal_data) col, row
    @to_2d_arr
    @render_2d_arr
 ) arguments...
@@ -11,7 +11,7 @@ require 'at-lodash'
 @set_point_coll = (col, row)->
    {x: 0, y: 0, v: i} for i in [0...row * col]
 
-@get_spinal_data_coll = (pointColl, c, r)=>
+@get_spinal_data = (pointColl, c, r)=>
    @each @cloneDeep(pointColl), (v, i, o)=>
       pre = o[i - 1] ? {x: -1, y: 0}
       isDownturnX = pre.y is r - 1
