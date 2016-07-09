@@ -2,8 +2,7 @@ require '../config'
 _ = require 'lodash'
 
 describe 'spinal Array', ->
-   {get_boundary} = require '../../src/spinal_array' # not plan to test
-   {set_point_coll, get_spinal_data_coll, to_2d_array} = require '../../src/spinal_array' # plan to test
+   {set_point_coll, get_spinal_data_coll, to_2d_arr, render_2d_arr} = require '../../src/spinal_array' # plan to test
    describe 'set_point_coll(col, row)', ->
       it 'should be collection object', ->
          set_point_coll(5, 4).should.is.an.Object()
@@ -54,3 +53,6 @@ describe 'spinal Array', ->
             '1':(it)-> it.should.be.a.Array().containDeepOrdered([13,1,2])
             '2':(it)-> it.should.be.a.Array().containDeepOrdered([12,1,2])
             '3':(it)-> it.should.be.a.Array().containDeepOrdered([11,10,9])
+   describe.only 'render_2d_arr', ->
+      [col, row] = [5, 4]
+      render_2d_arr to_2d_arr get_spinal_data_coll set_point_coll(col, row), col, row

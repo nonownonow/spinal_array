@@ -31,4 +31,7 @@ require 'at-lodash'
       @set r, "[#{v.y}][#{v.x}]", v.v
    , (@concat arr = [], [0...col] for [0...row])
 
+@render_2d_arr = (arr)=>
+   @each arr, (v)=>
+      console.log("#{@join v,' '}")
 
