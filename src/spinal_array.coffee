@@ -8,28 +8,21 @@ require 'at-lodash'
 @set_point_coll = (col, row)->
    {num: i, x: 0, y: 0} for i in [0...row * col]
 
-@get_step = (pos1, c, r) =>
-   cycle = [c, r, c, r]
-   (pos1.num) % (@sum(cycle) - cycle.length)
-
-@get_process_status = (pos1, c, r)=>
-   step = @get_step(pos1, c, r)
-   if step < c - 1 then {x: 1, y: 0}
-   else if step < c + r - 2 then {x: 0, y: 1}
-   else if step < c + r + c - 3 then {x: -1, y: 0}
-   else if step < c + r + c + r - 4 then {x: 0, y: -1}
-
 @get_spinal_data_coll = (pointColl, c, r)=>
    @each @cloneDeep(pointColl), (v, i, o)=>
-      pre = o[i - 1] ? {x: -1, y: 0, num: -1}
-#      if @get_step(pre,c,r) is c+r+c+r-4
-      status = @get_process_status(pre, c, r)
-      @set v, 'x', pre.x + status.x
-      @set v, 'y', pre.y + status.y
-
-
-#   @map pointColl, (v,i)=>
-
+      pre = o[i - 1] ? {x: -1, y: 0}
+      isStartY = pre.y is pointColl[0].y
+      isUpturnX = pre.x is c - 1
+      if isStartY and pre.x < c - 1 then v.x = pre.x + 1
+      else if isUpturnX and pre.y < r - 1
+         v.x = pre.x
+         v.y = pre.y + 1
+      else if pre.x > pointColl[0].x
+         v.x = pre.x - 1
+         v.y = pre.y
+      else
+         v.x = pre.x
+         v.y = pre.y - 1
 
 @to_spinal_array = (spinalColl)->
 #render the location-array and show console
