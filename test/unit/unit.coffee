@@ -47,12 +47,11 @@ describe 'spinal Array', ->
       spinalColl = get_spinal_data_coll set_point_coll(col, row), col, row
 
       it "should array.length is col, and array[0].length is row", ->
-         console.log to_2d_arr(spinalColl).should.be.a.Array()
          to_2d_arr(spinalColl).should.be.a.Array().which.match
             '0':(it)-> it.should.be.a.Array().containDeepOrdered([14,15,17])
             '1':(it)-> it.should.be.a.Array().containDeepOrdered([13,1,2])
             '2':(it)-> it.should.be.a.Array().containDeepOrdered([12,1,2])
             '3':(it)-> it.should.be.a.Array().containDeepOrdered([11,10,9])
-   describe.only 'render_2d_arr', ->
+   describe 'render_2d_arr', ->
       [col, row] = [5, 4]
       render_2d_arr to_2d_arr get_spinal_data_coll set_point_coll(col, row), col, row
