@@ -2,6 +2,9 @@ require 'at-lodash'
 
 @spinal_array = (col, row)=> @flow(
    @set_point_coll
+   @$(@get_spinal_data_coll) col, row
+   @to_2d_arr
+   @render_2d_arr
 ) arguments...
 
 #set point on location with default position, (0,0) and set location infomation
@@ -33,5 +36,6 @@ require 'at-lodash'
 
 @render_2d_arr = (arr)=>
    @each arr, (v)=>
-      console.log("#{@join v,' '}")
+      unless @isArray v then throw 'not Array!'
+      console.log("#{@join v, ' '}")
 
