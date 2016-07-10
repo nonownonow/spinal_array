@@ -16,7 +16,7 @@ describe 'spinal Array', ->
    describe 'get_spinner_data', ->
       [col, row] = [5, 4]
       point_coll = set_point_coll(col, row)
-      console.log get_spinal_coll(point_coll, col, row)
+#      console.log get_spinal_coll(point_coll, col, row)
       it "should increase x 1point until point_coll's length is range from 0 to col", ->
          get_spinal_coll(point_coll, col, row)[2].should.has.property('x', 2)
          get_spinal_coll(point_coll, col, row)[2].should.has.property('y', 0)
@@ -38,19 +38,19 @@ describe 'spinal Array', ->
          get_spinal_coll(point_coll, col, row)[col + row + col - 1].should.has.property('y', 1)
          get_spinal_coll(point_coll, col, row)[col + row + col - 1].should.has.property('x', 0)
       it "should decrease y 1point until point_coll's length is range from col+row+col+row-4 to col+row+col+row-4+col", ->
-         get_spinal_coll(point_coll, col, row)[col + row + col + row - 4].should.has.property('x', 0)
-         get_spinal_coll(point_coll, col, row)[col + row + col + row - 4].should.has.property('y', 0)
-         get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('x', 1)
-         get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('y', 0)
+         get_spinal_coll(point_coll, col, row)[col + row + col + row - 4].should.has.property('x', 1)
+         get_spinal_coll(point_coll, col, row)[col + row + col + row - 4].should.has.property('y', 1)
+         get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('x', 2)
+         get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('y', 1)
    describe 'to_spinal_array', ->
       [col, row] = [5, 4]
       spinalColl = get_spinal_coll set_point_coll(col, row), col, row
 
       it "should array.length is col, and array[0].length is row", ->
          to_2d_arr(spinalColl).should.be.a.Array().which.match
-            '0':(it)-> it.should.be.a.Array().containDeepOrdered([14,15,17])
-            '1':(it)-> it.should.be.a.Array().containDeepOrdered([13,1,2])
-            '2':(it)-> it.should.be.a.Array().containDeepOrdered([12,1,2])
+            '0':(it)-> it.should.be.a.Array().containDeepOrdered([0,1,2])
+            '1':(it)-> it.should.be.a.Array().containDeepOrdered([13,14,15])
+            '2':(it)-> it.should.be.a.Array().containDeepOrdered([12,19,18])
             '3':(it)-> it.should.be.a.Array().containDeepOrdered([11,10,9])
    describe 'render_2d_arr', ->
       [col, row] = [5, 4]
