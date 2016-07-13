@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nonownonow/spinal_array.git"
+    "url": "git@github.com:oneinme/spinal_array.git"
   },
   "keywords": [
     "coffeescript",
@@ -25,11 +25,7 @@
   "license": "GPL",
   "devDependencies": {
     "mocha": "latest",
-    "should": "^8.1.1",
-    "should-sinon": "0.0.5",
-    "sinon": "^1.17.3",
-    "wdio-mocha-framework": "^0.2.12",
-    "webdriverio": "^4.0.5"
+    "should": "^8.1.1"
   },
   "dependencies": {
     "at-lodash": "latest",
