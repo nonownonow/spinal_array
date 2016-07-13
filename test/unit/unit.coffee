@@ -2,20 +2,23 @@ require '../config'
 _ = require 'lodash'
 
 describe 'spinal Array', ->
-   {set_point_coll, get_spinal_coll, to_2d_arr, render_2d_arr} = require '../../src/spinal_array' # plan to test
-   describe 'set_point_coll(col, row)', ->
-      it 'should be collection object', ->
-         set_point_coll(5, 4).should.is.an.Object()
+   {set_2d_coll, get_spinal_coll, to_2d_arr, render_2d_arr} = require '../../src/spinal_array' # plan to test
+   describe.only 'set_2d_coll(col, row)', ->
       it "should have property,'point' which is array collection that each object element has 'num,x,y' property", ->
-         set_point_coll(5, 6).should.be.an.Array().which.length(30)
-         set_point_coll(5, 4).should.be.an.Array().which.length(20)
-         set_point_coll(5, 4)[0].should.be.an.Object().with.property('v').which.is.eql(0)
-         set_point_coll(5, 4)[1].should.be.an.Object().with.property('v').which.is.eql(1)
-         set_point_coll(5, 4)[0].should.be.an.Object().with.property('x').which.is.eql(0)
-         set_point_coll(5, 4)[0].should.be.an.Object().with.property('y').which.is.eql(0)
+         set_2d_coll(2, 3).should.be.an.Array().which.length(6)
+         set_2d_coll(2, 3)[3].should.be.an.Object().with.property('x').which.is.eql(1)
+         set_2d_coll(2, 3)[3].should.be.an.Object().with.property('y').which.is.eql(1)
+         set_2d_coll(2, 3)[4].should.be.an.Object().with.property('x').which.is.eql(0)
+         set_2d_coll(2, 3)[4].should.be.an.Object().with.property('y').which.is.eql(2)
+
+         set_2d_coll(5, 6).should.be.an.Array().which.length(30)
+         set_2d_coll(5, 6)[6].should.be.an.Object().with.property('x').which.is.eql(1)
+         set_2d_coll(5, 6)[6].should.be.an.Object().with.property('y').which.is.eql(1)
+         set_2d_coll(5, 6)[13].should.be.an.Object().with.property('x').which.is.eql(3)
+         set_2d_coll(5, 6)[13].should.be.an.Object().with.property('y').which.is.eql(2)
    describe 'get_spinner_data', ->
       [col, row] = [5, 4]
-      point_coll = set_point_coll(col, row)
+      point_coll = set_2d_coll(col, row)
 #      console.log get_spinal_coll(point_coll, col, row)
       it "should increase x 1point until point_coll's length is range from 0 to col", ->
          get_spinal_coll(point_coll, col, row)[2].should.has.property('x', 2)
@@ -44,7 +47,7 @@ describe 'spinal Array', ->
          get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('y', 1)
    describe 'to_spinal_array', ->
       [col, row] = [5, 4]
-      spinalColl = get_spinal_coll set_point_coll(col, row), col, row
+      spinalColl = get_spinal_coll set_2d_coll(col, row), col, row
 
       it "should array.length is col, and array[0].length is row", ->
          to_2d_arr(spinalColl).should.be.a.Array().which.match
@@ -54,4 +57,4 @@ describe 'spinal Array', ->
             '3':(it)-> it.should.be.a.Array().containDeepOrdered([11,10,9])
    describe 'render_2d_arr', ->
       [col, row] = [5, 4]
-      render_2d_arr to_2d_arr get_spinal_coll set_point_coll(col, row), col, row
+      render_2d_arr to_2d_arr get_spinal_coll set_2d_coll(col, row), col, row

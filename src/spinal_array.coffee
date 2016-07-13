@@ -1,16 +1,14 @@
 require 'at-lodash'
 
 @spinal_array = (col, row)=> @flow(
-   @set_point_coll
+   @set_2d_coll
    @$(@get_spinal_coll) col, row
    @to_2d_arr
    @render_2d_arr
 ) arguments...
-@wow= ()=>
-   console.log 'wow'
 #set point on location with default position, (0,0) and set location infomation
-@set_point_coll = (col, row)->
-   {x: 0, y: 0, v: i} for i in [0...row * col]
+@set_2d_coll = (col, row)=>
+   {x: i % col, y: @floor(i / col), v: null} for i in [0...row * col]
 
 @get_spinal_coll = (pointColl, col, row)=>
    [isDownturn,c,r] = [null, col, row]
@@ -19,8 +17,8 @@ require 'at-lodash'
       isDownturn = true if pre.y is r - 1 and pre.x is c - 1
       if isDownturn and ((r - 1) - pre.y is r - 1 - 1)
          isDownturn = false
-         c = c-1
-         r = r-1
+         c = c - 1
+         r = r - 1
       if !isDownturn and pre.x < c - 1
          v.x = pre.x + 1
          v.y = pre.y
