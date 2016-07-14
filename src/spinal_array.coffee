@@ -6,11 +6,21 @@ require 'at-lodash'
    @to_2d_arr
    @render_2d_arr
 ) arguments...
-#set point on location with default position, (0,0) and set location infomation
-@set_2d_coll = (col, row)=>
+
+@rule_boundary = (c, r, start)=>
+   [{x: c, y: start.y}, {x: c - 1, y: r}, {x: start.x - 1, y: r - 1}]
+@rule_direction = (directions, i = 0)=>
+   loop yield directions[i++ % directions.length]
+
+@set_2d_coll = (col, row,
+   startPoint = {x: 0, y: 0},
+   boundary = @rule_boundary(col, row, startPoint),
+)=>
    {x: i % col, y: @floor(i / col), v: null} for i in [0...row * col]
 
-@get_spinal_coll = (pointColl, col, row)=>
+@get_spinal_coll = (pointColl, col, row , direction = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}])=>
+
+   directionItr = @rule_direction(direction)
    [isDownturn,c,r] = [null, col, row]
    @each @cloneDeep(pointColl), (v, i, o)=>
       pre = o[i - 1] ? {x: -1, y: 0}

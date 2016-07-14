@@ -3,23 +3,34 @@ _ = require 'lodash'
 
 describe 'spinal Array', ->
    {set_2d_coll, get_spinal_coll, to_2d_arr, render_2d_arr} = require '../../src/spinal_array' # plan to test
-   describe.only 'set_2d_coll(col, row)', ->
+   {rule_direction, rule_boundary} = require '../../src/spinal_array' # plan to test
+   describe 'set_2d_coll(col, row)', ->
       it "should have property,'point' which is array collection that each object element has 'num,x,y' property", ->
          set_2d_coll(2, 3).should.be.an.Array().which.length(6)
          set_2d_coll(2, 3)[3].should.be.an.Object().with.property('x').which.is.eql(1)
          set_2d_coll(2, 3)[3].should.be.an.Object().with.property('y').which.is.eql(1)
          set_2d_coll(2, 3)[4].should.be.an.Object().with.property('x').which.is.eql(0)
          set_2d_coll(2, 3)[4].should.be.an.Object().with.property('y').which.is.eql(2)
-
          set_2d_coll(5, 6).should.be.an.Array().which.length(30)
          set_2d_coll(5, 6)[6].should.be.an.Object().with.property('x').which.is.eql(1)
          set_2d_coll(5, 6)[6].should.be.an.Object().with.property('y').which.is.eql(1)
          set_2d_coll(5, 6)[13].should.be.an.Object().with.property('x').which.is.eql(3)
          set_2d_coll(5, 6)[13].should.be.an.Object().with.property('y').which.is.eql(2)
+   describe 'roll_boundary', ->
+      boundary = rule_boundary(5,6,{x:0, y:0})
+      it "should be a Array", ->
+         boundary.should.be.an.Array().with.length(3)
+         boundary[0].should.match({x:5,y:0})
+         boundary[2].should.match({x:-1,y:5})
+   describe 'roll_direction', ->
+      directionItr = rule_direction( [{x:1, y:0},{x:0, y:1}, {x:-1, y:0}, {x:0,y:-1}])
+      it 'should be a generater', ->
+         directionItr.should.be.a.iterator()
+         directionItr.next().should.be.a.type('object').which.match( done:false, value:(it)-> it.should.match(x:1,y:0) )
+         directionItr.next().should.be.a.type('object').which.match( done:false, value:(it)-> it.should.match(x:0,y:1) )
    describe 'get_spinner_data', ->
       [col, row] = [5, 4]
       point_coll = set_2d_coll(col, row)
-#      console.log get_spinal_coll(point_coll, col, row)
       it "should increase x 1point until point_coll's length is range from 0 to col", ->
          get_spinal_coll(point_coll, col, row)[2].should.has.property('x', 2)
          get_spinal_coll(point_coll, col, row)[2].should.has.property('y', 0)
@@ -45,16 +56,3 @@ describe 'spinal Array', ->
          get_spinal_coll(point_coll, col, row)[col + row + col + row - 4].should.has.property('y', 1)
          get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('x', 2)
          get_spinal_coll(point_coll, col, row)[col + row + col + row - 3].should.has.property('y', 1)
-   describe 'to_spinal_array', ->
-      [col, row] = [5, 4]
-      spinalColl = get_spinal_coll set_2d_coll(col, row), col, row
-
-      it "should array.length is col, and array[0].length is row", ->
-         to_2d_arr(spinalColl).should.be.a.Array().which.match
-            '0':(it)-> it.should.be.a.Array().containDeepOrdered([0,1,2])
-            '1':(it)-> it.should.be.a.Array().containDeepOrdered([13,14,15])
-            '2':(it)-> it.should.be.a.Array().containDeepOrdered([12,19,18])
-            '3':(it)-> it.should.be.a.Array().containDeepOrdered([11,10,9])
-   describe 'render_2d_arr', ->
-      [col, row] = [5, 4]
-      render_2d_arr to_2d_arr get_spinal_coll set_2d_coll(col, row), col, row
