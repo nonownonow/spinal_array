@@ -22,13 +22,13 @@
   "author": {
     "name": "nonownonow"
   },
-  "license": "GPL",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "latest",
     "should": "^8.1.1"
   },
   "dependencies": {
-    "at-lodash": "latest",
+    "at-lodash": "^1.2.8",
     "coffee-script": "latest"
   }
 }
