@@ -14,12 +14,14 @@ require 'at-lodash'
 
 @set_2d_coll = (col, row,
    startPoint = {x: 0, y: 0},
-   boundary = @rule_boundary(col, row, startPoint),
+   boundaryFn = @rule_boundary,
 )=>
-   {x: i % col, y: @floor(i / col), v: null} for i in [0...row * col]
+   boundary = @map boundaryFn(col,row,startPoint), @SS(@set,'v', undefined)
+   res = ( {x: i % col, y: @floor(i / col), v: null} for i in [0...row * col] )
+   @concat res, boundary
+
 
 @get_spinal_coll = (pointColl, col, row , direction = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}])=>
-
    directionItr = @rule_direction(direction)
    [isDownturn,c,r] = [null, col, row]
    @each @cloneDeep(pointColl), (v, i, o)=>

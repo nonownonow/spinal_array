@@ -6,16 +6,21 @@ describe 'spinal Array', ->
    {rule_direction, rule_boundary} = require '../../src/spinal_array' # plan to test
    describe 'set_2d_coll(col, row)', ->
       it "should have property,'point' which is array collection that each object element has 'num,x,y' property", ->
-         set_2d_coll(2, 3).should.be.an.Array().which.length(6)
          set_2d_coll(2, 3)[3].should.be.an.Object().with.property('x').which.is.eql(1)
          set_2d_coll(2, 3)[3].should.be.an.Object().with.property('y').which.is.eql(1)
          set_2d_coll(2, 3)[4].should.be.an.Object().with.property('x').which.is.eql(0)
          set_2d_coll(2, 3)[4].should.be.an.Object().with.property('y').which.is.eql(2)
-         set_2d_coll(5, 6).should.be.an.Array().which.length(30)
+         set_2d_coll(2, 3)[6..9].forEach (v)-> v.should.match (it)-> it.should.match({v:undefined})
+
          set_2d_coll(5, 6)[6].should.be.an.Object().with.property('x').which.is.eql(1)
          set_2d_coll(5, 6)[6].should.be.an.Object().with.property('y').which.is.eql(1)
          set_2d_coll(5, 6)[13].should.be.an.Object().with.property('x').which.is.eql(3)
          set_2d_coll(5, 6)[13].should.be.an.Object().with.property('y').which.is.eql(2)
+         res = set_2d_coll(5,6)
+         set_2d_coll(5, 6)[30..33].forEach (v)-> v.should.match (it)-> it.should.match({v:undefined})
+#         set_2d_coll(5, 6)[31].should.be.an.Object().with.property('v').which.is.eql(1)
+#         set_2d_coll(5, 6)[32].should.be.an.Object().with.property('v').which.is.eql(3)
+#         set_2d_coll(5, 6)[33].should.be.an.Object().with.property('v').which.is.eql(2)
    describe 'roll_boundary', ->
       boundary = rule_boundary(5,6,{x:0, y:0})
       it "should be a Array", ->
