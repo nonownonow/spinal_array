@@ -2,7 +2,7 @@ require '../config'
 _ = require 'lodash'
 
 describe 'spinal Array', ->
-   {set_2d_coll, get_spinal_coll, to_2d_arr, render_2d_arr, spinal_array} = require '../../src/spinal_array' # plan to test
+   {set_2d_coll, get_spinal_coll, spinal_array} = require '../../src/spinal_array' # plan to test
    {get_directionAi, get_boundarys} = require '../../src/spinal_array' # plan to test
    describe 'set_2d_coll(col, row)', ->
       it "should have property,'point' which is array collection that each object element has 'num,x,y' property", ->
