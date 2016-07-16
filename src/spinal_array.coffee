@@ -8,42 +8,40 @@ require 'at-lodash'
 ) arguments...
 
 @rule_boundary = (c, r, start)=>
-   [{x: c, y: start.y}, {x: c - 1, y: r}, {x: start.x - 1, y: r - 1}]
+   [{x: start.x + c, y: start.y}, {x: start.x + c - 1, y: start.y + r}, {x: start.x - 1, y: start.y + r - 1}]
 @rule_direction = (directions, i = 0)=>
    loop yield directions[i++ % directions.length]
 
-@set_2d_coll = (col, row,
-   startPoint = {x: 0, y: 0},
-   boundaryFn = @rule_boundary,
+@set_2d_coll = (
+   col, row,
 )=>
-   boundary = @map boundaryFn(col,row,startPoint), @SS(@set,'v', undefined)
    res = ( {x: i % col, y: @floor(i / col), v: null} for i in [0...row * col] )
-   @concat res, boundary
 
 
-@get_spinal_coll = (pointColl, col, row , direction = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}])=>
+@get_spinal_coll = (
+   pointColl, col, row
+)=>
+   startPoint = {x: 0, y: 0}
+   boundary = @map @rule_boundary(col, row, startPoint), @SS(@set, 'v', undefined)
+   pointColl = @concat pointColl, boundary
+   startValue = 0
+   direction = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}]
    directionItr = @rule_direction(direction)
-   [isDownturn,c,r] = [null, col, row]
-   @each @cloneDeep(pointColl), (v, i, o)=>
-      pre = o[i - 1] ? {x: -1, y: 0}
-      isDownturn = true if pre.y is r - 1 and pre.x is c - 1
-      if isDownturn and ((r - 1) - pre.y is r - 1 - 1)
-         isDownturn = false
-         c = c - 1
-         r = r - 1
-      if !isDownturn and pre.x < c - 1
-         v.x = pre.x + 1
-         v.y = pre.y
-      else if !isDownturn and pre.y < r - 1
-         v.x = pre.x
-         v.y = pre.y + 1
-      else if (c - 1) - pre.x < c - 1
-         v.x = pre.x - 1
-
-         v.y = pre.y
-      else
-         v.x = pre.x
-         v.y = pre.y - 1
+   {value} = directionItr.next()
+   res = @each pointColl, (v, i, o)=>
+      return false if i is pointColl.length - boundary.length
+      pre = o[i - 1] ? {x: -1, y: 0, v: startValue - 1}
+      findDir = ()=>
+         check = x: pre.x + value.x, y: pre.y + value.y
+         cur = @find(o, {x: check.x, y: check.y})
+         if !cur or cur.v is null
+            @set v, 'x', check.x
+            @set v, 'y', check.y
+            @set v, 'v', pre.v + 1
+         else
+            findDir value = directionItr.next().value
+      findDir(value)
+   res[...-boundary.length]
 
 @to_2d_arr = (spinalColl)=>
    col = @max(@map spinalColl, 'x') + 1
