@@ -22,7 +22,8 @@ npm-debug.log*
 !0526_code/**/*.json
 !package.json
 !wdio.conf.js
-!./index.js
+!index.js
+
 ## MicrosoftOffice template
 *.tmp
 
