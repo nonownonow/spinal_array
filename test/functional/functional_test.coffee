@@ -1,5 +1,4 @@
-require '../config'
-
+require 'should'
 describe 'spinal_array(x,y)', ->
    {spinal_array} = require '../../src/spinal_array'
    res = spinal_array(13,7)

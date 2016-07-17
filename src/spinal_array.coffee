@@ -1,20 +1,20 @@
 require 'at-lodash'
 
 @spinal_array = (
-   col, row,
-   startPoint = {x: 0, y: 0},
-   boundarys = @get_boundarys(col, row, startPoint),
+   col, row
+   startValue = 0
+   boundarys = @get_boundarys(col, row)
    directionAi = @get_directionAi [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}]
 )=>@flow(
    @set_2d_coll
-   @$(@get_spinal_coll) col, row, startPoint, boundarys
+   => @get_spinal_coll arguments..., col, row, startValue, boundarys, directionAi
    @to_2d_arr
+   -> console.log('wow')
 ) arguments...
 
-@get_boundarys = (c, r, start)=> [{x: start.x + c, y: start.y}, {x: start.x + c - 1, y: start.y + r}, {x: start.x - 1, y: start.y + r - 1}]
+@get_boundarys = (c, r)=> [{x:c, y: 0}, {x: c-1, y: r}, {x: -1, y: r-1}]
 
-@get_directionAi = (directions, i = 0)=>
-   loop yield directions[i++ % directions.length]
+@get_directionAi = (directions, i = 0)=> loop yield directions[i++ % directions.length]
 
 @set_2d_coll = (col, row)=> {
    x: i % col
@@ -22,18 +22,14 @@ require 'at-lodash'
    v: null
 } for i in [0...row * col]
 
-@get_spinal_coll = (pointColl, col, row, startPoint, boundarys)=>
-   startPoint = {x: 0, y: 0}
-   boundary = @map @get_boundarys(col, row, startPoint), @SS(@set, 'v', undefined)
+@get_spinal_coll = (pointColl, col, row, startValue, boundarys, directionAi)=>
+   boundary = @map boundarys, @SS(@set, 'v', undefined)
    pointColl = @concat pointColl, boundary
-   startValue = 0
-   direction = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}]
-   directionItr = @get_directionAi(direction)
-   {value} = directionItr.next()
-   res = @each pointColl, (v, i, o)=>
+   {value} = directionAi.next()
+   (@each pointColl, (v, i, o)=>
       return false if i is pointColl.length - boundary.length
       pre = o[i - 1] ? {x: -1, y: 0, v: startValue - 1}
-      findDir = ()=>
+      (findDir = ()=>
          check = x: pre.x + value.x, y: pre.y + value.y
          cur = @find(o, {x: check.x, y: check.y})
          if !cur or cur.v is null
@@ -41,9 +37,8 @@ require 'at-lodash'
             @set v, 'y', check.y
             @set v, 'v', pre.v + 1
          else
-            findDir value = directionItr.next().value
-      findDir(value)
-   res[...-boundary.length]
+            findDir value = directionAi.next().value)(value)
+   )[...-boundary.length]
 
 @to_2d_arr = (spinalColl)=>
    col = @max(@map spinalColl, 'x') + 1

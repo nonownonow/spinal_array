@@ -1,5 +1,4 @@
-require '../config'
-_ = require 'lodash'
+require 'should'
 
 describe 'spinal Array', ->
    {set_2d_coll, get_spinal_coll, spinal_array} = require '../../src/spinal_array' # plan to test
@@ -11,7 +10,6 @@ describe 'spinal Array', ->
          set_2d_coll(2, 3)[4].should.be.an.Object().with.property('x').which.is.eql(0)
          set_2d_coll(2, 3)[4].should.be.an.Object().with.property('y').which.is.eql(2)
          set_2d_coll(2, 3)[6..9].forEach (v)-> v.should.match (it)-> it.should.match({v: undefined})
-
          set_2d_coll(5, 6)[6].should.be.an.Object().with.property('x').which.is.eql(1)
          set_2d_coll(5, 6)[6].should.be.an.Object().with.property('y').which.is.eql(1)
          set_2d_coll(5, 6)[13].should.be.an.Object().with.property('x').which.is.eql(3)
@@ -31,10 +29,12 @@ describe 'spinal Array', ->
          directionItr.next().should.be.a.type('object').which.match(done: false, value: (it)-> it.should.match(x: 1, y: 0))
          directionItr.next().should.be.a.type('object').which.match(done: false, value: (it)-> it.should.match(x: 0, y: 1))
    describe 'get_spinner_coll', ->
+      [col, row, startValue, directions] = [5, 4, 0, [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}]]
+      boundarys = get_boundarys(col, row)
+      directionAi = get_directionAi directions
+      point_coll = set_2d_coll(col, row)
       context '5*4 space', ->
-         [col, row] = [5, 4]
-         point_coll = set_2d_coll(col, row)
-         spinal_coll = get_spinal_coll(point_coll,col,row)
+         spinal_coll = get_spinal_coll(point_coll, col, row, startValue, boundarys, directionAi)
          it "should have property spinal array's location", ->
             spinal_coll[2].should.match(x: 2, y: 0)
             spinal_coll[4].should.match(x: 4, y: 0)
@@ -54,9 +54,11 @@ describe 'spinal Array', ->
             spinal_coll[18].should.match(x: 2, y: 2)
             spinal_coll[19].should.match(x: 1, y: 2)
       context '3,4 space', ->
-         [col, row] = [3, 4]
+         [col, row, startValue, directions] = [3, 4, 0, [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}]]
+         boundarys = get_boundarys(col, row)
+         directionAi = get_directionAi directions
          point_coll = set_2d_coll(col, row)
-         spinal_coll = get_spinal_coll(point_coll,col,row)
+         spinal_coll = get_spinal_coll(point_coll, col, row, startValue, boundarys, directionAi)
          it "should have property spinal array's location", ->
             spinal_coll[4].should.match(x: 2, y: 2)
             spinal_coll[7].should.match(x: 0, y: 3)
